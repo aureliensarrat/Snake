@@ -144,6 +144,11 @@ h1{
     position: relative;
 }
 
+.score{
+    font-size: 5em;
+    color: #fefee2;
+}
+
 /*End-screen*/
 
 .end-screen{
