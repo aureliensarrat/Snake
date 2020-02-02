@@ -1,14 +1,20 @@
 # Snake-Game
 Simple game of snake
+Eat as many apples as you can !
 
-Controls :
+# Controls :
 
 ↑ Up 
 ↓ Down
 → Right
 ← Left
 
-made by Aurélien Sarrat
+Made by Aurélien Sarrat
 
-Game for a homework assignment at Hetic 
+Game for a homework assignment at Hetic (H2)
+
+### How to make it better?
+
+- Improve graphics
+- Store high scores on the computer
 

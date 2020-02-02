@@ -57,13 +57,14 @@ const scale = 10
 const rows = canvas.height / scale
 const columns = canvas.width / scale
 let snake
+let myLoop = null
 
 function setup() {
   snake = new Snake()
   fruit = new Fruit()
   fruit.pickLocation()
 
-  window.setInterval(() => {
+  myLoop = window.setInterval(() => {
     context.clearRect(0, 0, canvas.width, canvas.height)
     fruit.draw()
     snake.update()
@@ -88,6 +89,7 @@ window.addEventListener('keydown', ((event) => {
 function endGame (){
   document.querySelector('.game-screen').style.display = 'none'
   document.querySelector('.end-screen').style.display = 'flex'
+  clearInterval(myLoop)
 }
 
   /* Snake function */
