@@ -9,12 +9,12 @@ Eat as many apples as you can !
 → Right
 ← Left
 
-Made by Aurélien Sarrat
-
-Game for a homework assignment at Hetic (H2)
-
-### How to make it better?
+# How to improve the Game ?
 
 - Improve graphics
 - Store high scores on the computer
+- Add somes Audio
 
+Made by Aurélien Sarrat
+
+Game for a homework assignment at Hetic (H2)
