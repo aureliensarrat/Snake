@@ -1,4 +1,4 @@
-/*Screen Changes*/
+/* Screen Changes */
 
 document.querySelector('.never-play-js').addEventListener('click', () =>
 {
@@ -10,6 +10,7 @@ document.querySelector('.already-play-js').addEventListener('click', () =>
 {
     document.querySelector('.enter-screen').style.display = 'none'
     document.querySelector('.game-screen').style.display = 'flex'
+    startGame()
 })
 
 document.querySelector('.welcome-button-js').addEventListener('click', () =>
@@ -17,6 +18,7 @@ document.querySelector('.welcome-button-js').addEventListener('click', () =>
     document.querySelector('.welcome-screen').style.display = 'none'
     document.querySelector('.game-screen').style.display = 'flex'
     document.querySelector('.welcome-button-js').style.display = 'none'
+    startGame()
 })
 
 document.querySelector('.restart-button-js').addEventListener('click', () =>
@@ -25,7 +27,7 @@ document.querySelector('.restart-button-js').addEventListener('click', () =>
     document.querySelector('.enter-screen').style.display = 'flex'
 })
 
-/*Welcome Timeout Functions*/
+/* Welcome Timeout Functions */
 
 setTimeout(() => {
     document.querySelector('.welcome1').style.display = 'none'
@@ -44,155 +46,155 @@ setTimeout(() => {
     },2000)
 }, 2000)
 
-/* All Setup and drawing function*/
+/* Snake Game */
 
-const canvas = document.querySelector(".canvas")
-const context = canvas.getContext("2d")
-const scale = 10
-const rows = canvas.height / scale
-const columns = canvas.width / scale
-let snake
+function startGame(){
 
-(function setup() {
-  snake = new Snake()
-  fruit = new Fruit()
-  fruit.pickLocation()
+  /* All Setup and drawing function */
 
-  window.setInterval(() => {
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    fruit.draw()
-    snake.update()
-    snake.draw()
+  const canvas = document.querySelector(".canvas")
+  const context = canvas.getContext("2d")
+  const scale = 10
+  const rows = canvas.height / scale
+  const columns = canvas.width / scale
+  let snake
 
-    if (snake.eat(fruit)) {
-      fruit.pickLocation()
-    }
+  (function setup() {
+    snake = new Snake()
+    fruit = new Fruit()
+    fruit.pickLocation()
 
-    snake.checkCollision()
-    document.querySelector('.score').innerText = snake.total
+    window.setInterval(() => {
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      fruit.draw()
+      snake.update()
+      snake.draw()
 
-  }, 250)
-}())
+      if (snake.eat(fruit)) {
+        fruit.pickLocation()
+      }
 
-window.addEventListener('keydown', ((event) => {
-  const direction = event.key.replace('Arrow', '')
-  snake.changeDirection(direction)
-}))
+      snake.checkCollision()
+      document.querySelector('.score').innerText = snake.total
+      document.querySelector('.finalScore').innerText = snake.total
 
-function endGame (){
+    }, 250)
+  }())
+
+  window.addEventListener('keydown', ((event) => {
+    const direction = event.key.replace('Arrow', '')
+    snake.changeDirection(direction)
+  }))
+
+  function endGame (){
     document.querySelector('.game-screen').style.display = 'none'
     document.querySelector('.end-screen').style.display = 'flex'
-}
+  }
 
-/* Snake function*/
+  /* Snake function */
 
-function Snake() {
-  this.x = 0
-  this.y = 0
-  this.xSpeed = scale * 2
-  this.ySpeed = 0
-  this.total = 0
-  this.tail = []
-  this.finalScore
+  function Snake() {
+    this.x = 0
+    this.y = 0
+    this.xSpeed = scale * 1
+    this.ySpeed = 0
+    this.total = 0
+    this.tail = []
+    this.finalScore
 
-  this.draw = () => {
-    context.fillStyle = "#59982f"
-    for (let i=0; i<this.tail.length; i++) {
-      context.fillRect(this.tail[i].x,
+    this.draw = () => {
+      context.fillStyle = "#59982f"
+      for (let i=0; i<this.tail.length; i++) {
+        context.fillRect(this.tail[i].x,
         this.tail[i].y, scale, scale)
+      }
+
+      context.fillRect(this.x, this.y, scale, scale)
     }
 
-    context.fillRect(this.x, this.y, scale, scale)
-  }
+   this.update = () => {
+     for (let i=0; i<this.tail.length - 1; i++) {
+       this.tail[i] = this.tail[i+1];
+     }
 
-  this.update = () => {
-    for (let i=0; i<this.tail.length - 1; i++) {
-      this.tail[i] = this.tail[i+1];
+      this.tail[this.total - 1] = { x: this.x, y: this.y }
+
+      this.x += this.xSpeed
+      this.y += this.ySpeed
+
+     if (this.x > canvas.width) {
+       this.x = 0
+       endGame()
+     }
+
+      if (this.y > canvas.height) {
+       this.y = 0
+       endGame()
+     }
+
+     if (this.x < 0) {
+       this.x = canvas.width
+       endGame()
+     }
+
+     if (this.y < 0) {
+       this.y = canvas.height
+       endGame()
+     }
+   }
+
+   this.changeDirection = (direction) => { 
+     switch(direction) {
+        case 'Up':
+         this.xSpeed = 0
+         this.ySpeed = -scale * 1 
+         break
+       case 'Down':
+         this.xSpeed = 0
+         this.ySpeed = scale * 1
+         break
+        case 'Left':
+          this.xSpeed = -scale * 1
+          this.ySpeed = 0
+          break
+        case 'Right':
+          this.xSpeed = scale * 1
+          this.ySpeed = 0
+          break
+      }
     }
 
-    this.tail[this.total - 1] = { x: this.x, y: this.y }
-
-    this.x += this.xSpeed
-    this.y += this.ySpeed
-
-    if (this.x > canvas.width) {
-      this.x = 0
-      endGame()
+    this.eat = (fruit) => {
+      if (this.x === fruit.x && this.y === fruit.y){
+        this.total++
+        return true
+      }
+      return false
     }
 
-    if (this.y > canvas.height) {
-      this.y = 0
-      endGame()
-    }
-
-    if (this.x < 0) {
-      this.x = canvas.width
-      endGame()
-    }
-
-    if (this.y < 0) {
-      this.y = canvas.height
-      endGame()
-    }
-  }
-
-  this.changeDirection = (direction) => { 
-    switch(direction) {
-      case 'Up':
-        this.xSpeed = 0
-        this.ySpeed = -scale * 2
-        break
-      case 'Down':
-        this.xSpeed = 0
-        this.ySpeed = scale * 2
-        break
-      case 'Left':
-        this.xSpeed = -scale * 2
-        this.ySpeed = 0
-        break
-      case 'Right':
-        this.xSpeed = scale * 2
-        this.ySpeed = 0
-        break
-    }
-  }
-
-  this.eat = (fruit) => {
-    if (this.x === fruit.x && this.y === fruit.y){
-      this.total++
-      return true
-    }
-    return false
-  }
-
-  this.checkCollision = () => {  
-    for (let i=0; i<this.tail.length; i++) {
-      if (this.x === this.tail[i].x && this.y === this.tail[i].y){
-        this.tail = []
-        finalScore = total
-        document.querySelector('.finalScore').innerText = finalScore
-        this.total = 0
-        endGame()
+    this.checkCollision = () => {  
+      for (let i=0; i<this.tail.length; i++) {
+        if (this.x === this.tail[i].x && this.y === this.tail[i].y){
+          endGame()
+        }
       }
     }
   }
-}
 
-/* Apple Fruit function*/
+  /* Apple Fruit function */
 
-function Fruit() {
-  this.x
-  this.y
+  function Fruit() {
+    this.x
+    this.y
 
-  this.pickLocation = function() {
-    this.x = (Math.floor(Math.random() *
-      columns - 1) + 1) * scale
-    this.y = (Math.floor(Math.random() *
-      rows - 1) + 1) * scale
-  }
+    this.pickLocation = function() {
+      this.x = (Math.floor(Math.random() * columns - 1) + 1) * scale
+      this.y = (Math.floor(Math.random() * rows - 1) + 1) * scale
+    }
 
-  this.draw = function() {
-    context.fillStyle = "#ff0800"
-    context.fillRect(this.x, this.y, scale, scale)
+    this.draw = function() {
+      context.fillStyle = "#ff0800"
+      context.fillRect(this.x, this.y, scale, scale)
+    }
   }
 }
