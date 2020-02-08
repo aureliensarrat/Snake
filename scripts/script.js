@@ -1,3 +1,5 @@
+let difficulty
+
 /* Screen Changes */
 
 document.querySelector('.never-play-js').addEventListener('click', () =>
@@ -9,22 +11,61 @@ document.querySelector('.never-play-js').addEventListener('click', () =>
 document.querySelector('.already-play-js').addEventListener('click', () =>
 {
     document.querySelector('.enter-screen').style.display = 'none'
-    document.querySelector('.game-screen').style.display = 'flex'
-    setup()
+    document.querySelector('.difficulty-screen').style.display = 'flex'
 })
 
 document.querySelector('.welcome-button-js').addEventListener('click', () =>
 {
     document.querySelector('.welcome-screen').style.display = 'none'
-    document.querySelector('.game-screen').style.display = 'flex'
+    document.querySelector('.difficulty-screen').style.display = 'flex'
     document.querySelector('.welcome-button-js').style.display = 'none'
+})
+
+document.querySelector('.difficulty1').addEventListener('click', () =>
+{
+    document.querySelector('.difficulty-screen').style.display = 'none'
+    document.querySelector('.game-screen').style.display = 'flex'
+    document.querySelector('.canvas1').style.display = 'flex'
+    difficulty = 1
+    init()
+    setup()
+})
+
+document.querySelector('.difficulty2').addEventListener('click', () =>
+{
+    document.querySelector('.difficulty-screen').style.display = 'none'
+    document.querySelector('.game-screen').style.display = 'flex'
+    document.querySelector('.canvas2').style.display = 'flex'
+    difficulty = 2
+    init()
+    setup()
+})
+
+document.querySelector('.difficulty3').addEventListener('click', () =>
+{
+    document.querySelector('.difficulty-screen').style.display = 'none'
+    document.querySelector('.game-screen').style.display = 'flex'
+    document.querySelector('.canvas3').style.display = 'flex'
+    difficulty = 3
+    init()
+    setup()
+})
+
+document.querySelector('.difficulty4').addEventListener('click', () =>
+{
+    document.querySelector('.difficulty-screen').style.display = 'none'
+    document.querySelector('.game-screen').style.display = 'flex'
+    document.querySelector('.canvas4').style.display = 'flex'
+    difficulty = 4
+    init()
     setup()
 })
 
 document.querySelector('.restart-button-js').addEventListener('click', () =>
 {
     document.querySelector('.end-screen').style.display = 'none'
-    document.querySelector('.enter-screen').style.display = 'flex'
+    document.querySelector('.game-screen').style.display = 'flex'
+    
 })
 
 /* Welcome Timeout Functions */
@@ -51,13 +92,17 @@ setTimeout(() => {
 
   /* All Setup and drawing function */
 
-const canvas = document.querySelector(".canvas")
-const context = canvas.getContext("2d")
-const scale = 10
-const rows = canvas.height / scale
-const columns = canvas.width / scale
-let snake
-let myLoop = null
+  
+function init(){
+  const canvas = document.querySelector(".canvas" + difficulty + "")
+  console.log(canvas)
+  const context = canvas.getContext("2d")
+  scale = 5
+  const rows = canvas.height / scale
+  const columns = canvas.width / scale
+  let snake
+  let myLoop = null
+}
 
 function setup() {
   snake = new Snake()
@@ -94,7 +139,7 @@ function endGame (){
 
   /* Snake function */
 
-function Snake() {
+function Snake (){
   this.x = 0
   this.y = 0
   this.xSpeed = scale * 1
@@ -124,22 +169,18 @@ function Snake() {
     this.y += this.ySpeed
 
     if (this.x > canvas.width) {
-      this.x = 0
       endGame()
     }
 
     if (this.y > canvas.height) {
-      this.y = 0
       endGame()
     }
 
     if (this.x < 0) {
-      this.x = canvas.width
       endGame()
     }
 
     if (this.y < 0) {
-      this.y = canvas.height
       endGame()
     }
   }
