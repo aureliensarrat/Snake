@@ -60,7 +60,8 @@ document.querySelector('.difficulty4').addEventListener('click', () =>
 document.querySelector('.restart-button-js').addEventListener('click', () =>
 {
     document.querySelector('.end-screen').style.display = 'none'
-    document.querySelector('.game-screen').style.display = 'flex'
+    document.querySelector('.enter-screen').style.display = 'flex'
+    canvas.style.display = 'none'
     
 })
 
@@ -88,9 +89,6 @@ setTimeout(() => {
 
   /* All Setup and drawing function */
 
-  
-
-
 function startGame(){
   const canvas = document.querySelector(".canvas" + difficulty + "")
   const context = canvas.getContext("2d")
@@ -99,27 +97,30 @@ function startGame(){
   const columns = canvas.width / scale
   let snake
   let myLoop = null
+  setup()
+  
+  function setup(){
+    snake = new Snake()
+    fruit = new Fruit()
+    fruit.pickLocation()
+    
+    myLoop = window.setInterval(() => {
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      fruit.draw()
+      snake.update()
+      snake.draw()
+    
+      if (snake.eat(fruit)) {
+        fruit.pickLocation()
+      }
+    
+      snake.checkCollision()
+      document.querySelector('.score').innerText = snake.total
+      document.querySelector('.finalScore').innerText = snake.total
+    
+    }, 250)
+  }
 
-  snake = new Snake()
-  fruit = new Fruit()
-  fruit.pickLocation()
-  
-  myLoop = window.setInterval(() => {
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    fruit.draw()
-    snake.update()
-    snake.draw()
-  
-    if (snake.eat(fruit)) {
-      fruit.pickLocation()
-    }
-  
-    snake.checkCollision()
-    document.querySelector('.score').innerText = snake.total
-    document.querySelector('.finalScore').innerText = snake.total
-  
-  }, 250)
-  
   window.addEventListener('keydown', ((event) => {
     const direction = event.key.replace('Arrow', '')
     snake.changeDirection(direction)
